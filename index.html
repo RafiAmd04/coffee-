@@ -64,6 +64,13 @@
       h1 { font-size: 22px; }
       p { font-size: 15px; }
     }
+     #yesBtn {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999; 
+  }
   </style>
 </head>
 
@@ -159,15 +166,11 @@
     document.getElementById("resultText").innerText = "Let’s plan it now ☕";
     document.getElementById("resultGif").src = "happy.gif";
   });
-  #yesBtn {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-}
+ 
 
 </script>
 
 </body>
 </html>
+
 
