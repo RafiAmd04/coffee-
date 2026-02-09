@@ -124,22 +124,28 @@
   }
 
   function moveNo() {
-    attempts++;
+  attempts++;
 
-    // clamp movement inside button container
-    noBtn.style.left = Math.random() * 180 + "px";
-    noBtn.style.top  = Math.random() * 60 + "px";
+  // get viewport dimensions
+  const vw = window.innerWidth - noBtn.offsetWidth;
+  const vh = window.innerHeight - noBtn.offsetHeight;
 
-    funnyGif.classList.remove("hidden");
+  // move NO button anywhere in the viewport
+  noBtn.style.position = "fixed"; // ensures it moves relative to the screen
+  noBtn.style.left = Math.random() * vw + "px";
+  noBtn.style.top  = Math.random() * vh + "px";
 
-    if (attempts < 4) {
-      funnyText.innerText = "Hey hey 😏";
-      funnyGif.src = "mochi.gif";
-    } else {
-      funnyText.innerText = "You’re trying too hard 😤";
-      funnyGif.src = "comeon.gif";
-    }
+  funnyGif.classList.remove("hidden");
+
+  if (attempts < 4) {
+    funnyText.innerText = "Hey hey 😏";
+    funnyGif.src = "mochi.gif";
+  } else {
+    funnyText.innerText = "You’re trying too hard 😤";
+    funnyGif.src = "comeon.gif";
   }
+}
+
 
   // work on both desktop and touch devices
   ["mouseover", "touchstart"].forEach(evt => {
@@ -153,7 +159,15 @@
     document.getElementById("resultText").innerText = "Let’s plan it now ☕";
     document.getElementById("resultGif").src = "happy.gif";
   });
+  #yesBtn {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 </script>
 
 </body>
 </html>
+
