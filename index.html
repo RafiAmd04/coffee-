@@ -27,123 +27,133 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
-    h1 {
-      margin-bottom: 15px;
-    }
+    h1 { margin-bottom: 15px; }
 
     .buttons {
       position: relative;
       height: 100px;
       margin-top: 20px;
+      overflow: hidden; /* keep NO button inside the card */
     }
 
     button {
-      padding: 12px 22px;
+      padding: 14px 24px;
       font-size: 16px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      position: absolute;
-      transition: 0.2s;
+      margin: 10px;
+      min-width: 110px;
+      min-height: 44px; /* thumb-friendly */
     }
 
-    #yesBtn {
-      background: #ff4d6d;
-      color: white;
-      left: 30%;
-    }
+    .primary { background: #ff4d6d; color: white; }
+    .secondary { background: #ccc; }
 
-    #noBtn {
-      background: #ccc;
-      left: 55%;
-    }
+    .hidden { display: none; }
 
-    .hidden {
-      display: none;
-    }
-
-    #funny img {
+    img {
       width: 100%;
+      max-width: 300px;
       border-radius: 12px;
-      margin-top: 10px;
+      margin-top: 15px;
+    }
+
+    @media (max-height: 700px) {
+      .card { padding: 20px; }
+      h1 { font-size: 22px; }
+      p { font-size: 15px; }
     }
   </style>
 </head>
 
 <body>
 
-<div class="card">
+<!-- SCREEN 1: GENDER -->
+<div class="card" id="screen-gender">
+  <h1>Quick question 😶</h1>
+  <p>Are you a…</p>
+  <button class="primary" onclick="chooseGirl()">Girl 👩</button>
+  <button class="secondary" onclick="chooseBoy()">Boy 👨</button>
+</div>
+
+<!-- SCREEN 2: COFFEE -->
+<div class="card hidden" id="screen-coffee">
   <h1>Hey 🫣…</h1>
   <p>coffee together sometime soon? ☕😌</p>
 
   <div class="buttons">
-    <button id="yesBtn">OK</button>
-    <button id="noBtn">NO</button>
+    <button id="yesBtn" class="primary" style="left:30%; position:absolute;">OK</button>
+    <button id="noBtn" class="secondary" style="left:55%; position:absolute;">NO</button>
   </div>
 
-  <div id="funny" class="hidden">
-    <p id="funnyText"></p>
-    <img id="funnyGif">
-  </div>
+  <p id="funnyText"></p>
+  <img id="funnyGif" class="hidden">
+</div>
+
+<!-- SCREEN 3: RESULT -->
+<div class="card hidden" id="screen-result">
+  <h1 id="resultTitle"></h1>
+  <p id="resultText"></p>
+  <img id="resultGif">
 </div>
 
 <script>
+  const genderScreen = document.getElementById("screen-gender");
+  const coffeeScreen = document.getElementById("screen-coffee");
+  const resultScreen = document.getElementById("screen-result");
+
   const noBtn = document.getElementById("noBtn");
   const yesBtn = document.getElementById("yesBtn");
-  const funny = document.getElementById("funny");
-  const funnyText = document.getElementById("funnyText");
   const funnyGif = document.getElementById("funnyGif");
+  const funnyText = document.getElementById("funnyText");
 
   let attempts = 0;
 
-  noBtn.addEventListener("mouseover", () => {
+  function chooseBoy() {
+    genderScreen.classList.add("hidden");
+    resultScreen.classList.remove("hidden");
+    document.getElementById("resultTitle").innerText = "Bro 😐";
+    document.getElementById("resultText").innerText = "Wrong door. Exit politely.";
+    document.getElementById("resultGif").src = "gay.jpg";
+  }
+
+  function chooseGirl() {
+    genderScreen.classList.add("hidden");
+    coffeeScreen.classList.remove("hidden");
+  }
+
+  function moveNo() {
     attempts++;
 
-    // move NO button
-    noBtn.style.left = Math.random() * 250 + "px";
-    noBtn.style.top = Math.random() * 150 + "px";
+    // clamp movement inside button container
+    noBtn.style.left = Math.random() * 180 + "px";
+    noBtn.style.top  = Math.random() * 60 + "px";
 
-    funny.classList.remove("hidden");
+    funnyGif.classList.remove("hidden");
 
-    // STAGE 1: text only
-    if (attempts <= 4) {
-  
-      funnyGif.style.display = "block";
+    if (attempts < 4) {
+      funnyText.innerText = "Hey hey 😏";
       funnyGif.src = "mochi.gif";
-    }
-
-    // STAGE 3: second GIF
-    else {
-      funnyText.innerText = "Come on 😤";
-      funnyGif.style.display = "block";
+    } else {
+      funnyText.innerText = "You’re trying too hard 😤";
       funnyGif.src = "comeon.gif";
     }
+  }
+
+  // work on both desktop and touch devices
+  ["mouseover", "touchstart"].forEach(evt => {
+    noBtn.addEventListener(evt, moveNo);
   });
 
   yesBtn.addEventListener("click", () => {
-    document.body.innerHTML = `
-      <div style="
-        height:100vh;
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-        justify-content:center;
-        background:#ff4d6d;
-        text-align:center;
-      ">
-        <h1 style="color:white;">Yay 😍</h1>
-        <p style="color:white; font-size:18px;">
-          lets plan it now ☕
-        </p>
-        <img src="happy.gif" style="width:300px; border-radius:16px;">
-      </div>
-    `;
+    coffeeScreen.classList.add("hidden");
+    resultScreen.classList.remove("hidden");
+    document.getElementById("resultTitle").innerText = "Yay 😍";
+    document.getElementById("resultText").innerText = "Let’s plan it now ☕";
+    document.getElementById("resultGif").src = "happy.gif";
   });
 </script>
 
 </body>
 </html>
-
-
-
-
